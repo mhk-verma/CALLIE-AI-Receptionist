@@ -1,0 +1,35 @@
+<div class="card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(34, 211, 238, 0.1) 100%); border-color: rgba(99, 102, 241, 0.3);">
+    <div class="flex items-center gap-4 mb-6">
+        <div class="ai-orb">
+            <i data-lucide="sparkles" style="width: 24px; height: 24px; color: white;"></i>
+        </div>
+        <div>
+            <div class="text-lg font-bold">CALLIE</div>
+            <div class="text-sm text-muted">AI Receptionist</div>
+        </div>
+    </div>
+    
+    <div class="flex items-center gap-2 mb-6">
+        <span class="status-online"></span>
+        <span class="text-sm font-medium text-success">Online</span>
+        <span class="text-sm text-muted">Available 24/7</span>
+    </div>
+    
+    <div class="space-y-4 mb-6">
+        <div class="flex justify-between items-center">
+            <span class="text-sm text-muted">Calls handled</span>
+            <span class="text-xl font-bold">{{ calls|default:0 }}</span>
+        </div>
+        <div class="flex justify-between items-center">
+            <span class="text-sm text-muted">Resolution</span>
+            <span class="text-xl font-bold text-accent">{{ resolution|default:0 }}%</span>
+        </div>
+    </div>
+    
+    {% if show_demo_button %}
+    <a href="{% url 'demo:home' %}" class="btn btn-primary w-full">
+        <i data-lucide="play" style="width: 16px; height: 16px;"></i>
+        Open Live Demo
+    </a>
+    {% endif %}
+</div>

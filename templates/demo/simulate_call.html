@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call Simulation - CALLIE</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Design System -->
+    <link rel="stylesheet" href="/static/css/design-system.css">
+</head>
+<body>
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="sidebar-brand">
+                    <div class="ai-orb">
+                        <i data-lucide="sparkles" style="width: 20px; height: 20px; color: white;"></i>
+                    </div>
+                    <div>
+                        <div class="sidebar-brand-text">CALLIE</div>
+                        <div class="sidebar-brand-subtitle">AI Receptionist</div>
+                    </div>
+                </a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="/dashboard/" class="nav-item">
+                        <i data-lucide="layout-dashboard"></i>
+                        Dashboard
+                    </a>
+                    <a href="/demo/" class="nav-item active">
+                        <i data-lucide="play"></i>
+                        Live Demo
+                    </a>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="flex items-center gap-3">
+                    <div class="ai-orb" style="width: 32px; height: 32px;">
+                        <i data-lucide="sparkles" style="width: 16px; height: 16px; color: white;"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-sm font-medium">Callie</div>
+                        <div class="text-xs text-success flex items-center gap-1">
+                            <span class="status-online" style="width: 6px; height: 6px;"></span>
+                            Online
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto">
+            <div class="page-content">
+                <div class="max-w-6xl mx-auto">
+                    <div class="mb-6">
+                        <a href="/demo/" class="btn btn-ghost">
+                            <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+                            Back to Demo
+                        </a>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Call Interface -->
+                        <div class="lg:col-span-2">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <h3 class="card-title">Phone Call Simulation</h3>
+                                            <p class="text-sm text-muted">Receptionist: Callie</p>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="status-online"></span>
+                                            <span class="text-sm font-medium text-success">Connected</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-body">
+                                    <!-- Call Status -->
+                                    <div class="flex items-center justify-center gap-4 p-6 bg-background rounded-lg border border-border mb-6">
+                                        <div class="ai-orb" style="width: 56px; height: 56px;">
+                                            <i data-lucide="phone" style="width: 28px; height: 28px; color: white;"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-lg font-semibold">Incoming Call</div>
+                                            <div class="text-sm text-muted">+1 (555) 555-5555</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Conversation -->
+                                    <div id="conversation" class="bg-background rounded-lg p-4 mb-6 h-96 overflow-y-auto border border-border">
+                                        <div class="mb-4">
+                                            <div class="flex justify-start mb-3">
+                                                <div class="bg-purple-500/10 text-purple-400 rounded-lg px-4 py-3 max-w-xs">
+                                                    <div class="text-xs font-semibold mb-1 flex items-center gap-2">
+                                                        <i data-lucide="sparkles" style="width: 12px; height: 12px;"></i>
+                                                        AI Receptionist
+                                                    </div>
+                                                    <div class="text-sm">Hello! Thank you for calling. My name is Callie, your virtual receptionist. How can I help you today?</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Input -->
+                                    <div class="space-y-4">
+                                        <div>
+                                            <label class="form-label">Your Message</label>
+                                            <textarea 
+                                                id="userMessage" 
+                                                class="form-control" 
+                                                rows="3"
+                                                placeholder="Type your message as if you were a customer..."
+                                            ></textarea>
+                                        </div>
+                                        
+                                        <div class="flex items-center justify-between">
+                                            <label class="flex items-center gap-2 cursor-pointer">
+                                                <input type="checkbox" id="urgentCheck" class="form-control" style="width: auto;">
+                                                <span class="text-sm">Mark as Urgent</span>
+                                            </label>
+                                            
+                                            <div class="flex gap-2">
+                                                <button id="sendBtn" class="btn btn-primary">
+                                                    <i data-lucide="send" style="width: 16px; height: 16px;"></i>
+                                                    Send
+                                                </button>
+                                                <button id="endCallBtn" class="btn btn-danger">
+                                                    <i data-lucide="phone-off" style="width: 16px; height: 16px;"></i>
+                                                    End Call
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Call Info Panel -->
+                        <div class="space-y-6">
+                            <!-- AI Status -->
+                            <div class="card" style="background: var(--gradient-subtle); border-color: rgba(99, 102, 241, 0.3);">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="ai-orb" style="width: 40px; height: 40px;">
+                                        <i data-lucide="sparkles" style="width: 20px; height: 20px; color: white;"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold">Callie</div>
+                                        <div class="text-xs text-success flex items-center gap-1">
+                                            <span class="status-online" style="width: 6px; height: 6px;"></span>
+                                            Online
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-3">
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-muted">Calls handled</span>
+                                        <span class="font-medium">24</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-muted">Resolution</span>
+                                        <span class="font-medium text-accent">94.8%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Conversation Info -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="font-semibold">Conversation Info</h4>
+                                </div>
+                                <div class="space-y-3">
+                                    <div>
+                                        <div class="text-xs text-muted mb-1">Intent</div>
+                                        <div id="intentDisplay" class="text-sm font-medium">-</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-muted mb-1">Urgency</div>
+                                        <div id="urgencyDisplay" class="text-sm font-medium">-</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-muted mb-1">AI Resolution</div>
+                                        <div id="resolutionDisplay" class="text-sm font-medium">-</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Quick Prompts -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="font-semibold">Quick Prompts</h4>
+                                </div>
+                                <div class="space-y-2">
+                                    <button class="btn btn-secondary btn-sm w-full text-left" onclick="setPrompt('What are your hours today?')">
+                                        What are your hours today?
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm w-full text-left" onclick="setPrompt('I want to book an appointment')">
+                                        I want to book an appointment
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm w-full text-left" onclick="setPrompt('How much do you charge?')">
+                                        How much do you charge?
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm w-full text-left text-urgent" onclick="setPrompt('I need emergency assistance immediately')">
+                                        I need emergency assistance immediately
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        lucide.createIcons();
+        
+        function setPrompt(text) {
+            document.getElementById('userMessage').value = text;
+        }
+        
+        document.getElementById('sendBtn').addEventListener('click', function() {
+            const message = document.getElementById('userMessage').value;
+            const isUrgent = document.getElementById('urgentCheck').checked;
+            
+            if (!message.trim()) return;
+            
+            // Add user message
+            addMessage('customer', message);
+            document.getElementById('userMessage').value = '';
+            
+            // Show processing state
+            addSystemMessage('Callie is thinking...');
+            
+            // Simulate AI response (demo mode)
+            setTimeout(() => {
+                removeLastSystemMessage();
+                
+                // Simple demo responses
+                let aiResponse = "I understand. Let me help you with that.";
+                let intent = "General inquiry";
+                let urgency = isUrgent ? "Urgent" : "Normal";
+                let resolution = isUrgent ? "Escalated" : "AI Resolved";
+                
+                if (message.toLowerCase().includes('hours') || message.toLowerCase().includes('time')) {
+                    aiResponse = "We are open from 9 AM to 6 PM Monday through Friday, and 10 AM to 2 PM on weekends.";
+                    intent = "Business hours";
+                } else if (message.toLowerCase().includes('appointment') || message.toLowerCase().includes('book')) {
+                    aiResponse = "I'd be happy to help you schedule an appointment. May I have your name and preferred date?";
+                    intent = "Appointment booking";
+                } else if (message.toLowerCase().includes('price') || message.toLowerCase().includes('charge') || message.toLowerCase().includes('cost')) {
+                    aiResponse = "Our pricing depends on the service you need. Would you like me to connect you with our team for a detailed quote?";
+                    intent = "Pricing inquiry";
+                } else if (isUrgent || message.toLowerCase().includes('emergency') || message.toLowerCase().includes('immediately')) {
+                    aiResponse = "I understand this is urgent. Let me escalate this to our team right away. They will contact you immediately.";
+                    intent = "Emergency";
+                    resolution = "Escalated";
+                }
+                
+                addMessage('ai', aiResponse);
+                
+                // Update info panel
+                document.getElementById('intentDisplay').textContent = intent;
+                document.getElementById('urgencyDisplay').textContent = urgency;
+                document.getElementById('resolutionDisplay').textContent = resolution;
+                
+                if (isUrgent || resolution === 'Escalated') {
+                    addSystemMessage('⚠ This conversation has been escalated due to urgency.');
+                }
+            }, 1500);
+        });
+        
+        document.getElementById('endCallBtn').addEventListener('click', function() {
+            addSystemMessage('Call ended.');
+            setTimeout(() => {
+                window.location.href = '/demo/';
+            }, 1500);
+        });
+        
+        function addMessage(sender, content) {
+            const conversation = document.getElementById('conversation');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'mb-4';
+            
+            if (sender === 'customer') {
+                messageDiv.innerHTML = `
+                    <div class="flex justify-end">
+                        <div class="bg-blue-500/10 text-blue-400 rounded-lg px-4 py-3 max-w-xs">
+                            <div class="text-xs font-semibold mb-1">Customer</div>
+                            <div class="text-sm">${content}</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="flex justify-start">
+                        <div class="bg-purple-500/10 text-purple-400 rounded-lg px-4 py-3 max-w-xs">
+                            <div class="text-xs font-semibold mb-1 flex items-center gap-2">
+                                <i data-lucide="sparkles" style="width: 12px; height: 12px;"></i>
+                                AI Receptionist
+                            </div>
+                            <div class="text-sm">${content}</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            conversation.appendChild(messageDiv);
+            conversation.scrollTop = conversation.scrollHeight;
+            lucide.createIcons();
+        }
+        
+        function addSystemMessage(content) {
+            const conversation = document.getElementById('conversation');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'mb-4 text-center';
+            messageDiv.innerHTML = `
+                <span class="text-xs text-muted bg-card px-3 py-1 rounded-full border border-border">${content}</span>
+            `;
+            conversation.appendChild(messageDiv);
+            conversation.scrollTop = conversation.scrollHeight;
+        }
+        
+        function removeLastSystemMessage() {
+            const conversation = document.getElementById('conversation');
+            const systemMessages = conversation.querySelectorAll('.text-center');
+            if (systemMessages.length > 0) {
+                systemMessages[systemMessages.length - 1].remove();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CALLIE - AI Receptionist{% endblock %}</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    <!-- Design System -->
+    <link rel="stylesheet" href="/static/css/design-system.css">
+    
+    {% block extra_css %}{% endblock %}
+    
+    <style>
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: var(--color-sidebar);
+            border-right: 1px solid var(--color-border);
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            z-index: var(--z-sticky);
+            transition: transform var(--transition-normal);
+        }
+        
+        .sidebar-collapsed {
+            transform: translateX(-100%);
+        }
+        
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+        
+        .sidebar-brand .ai-orb {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .sidebar-brand-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+        
+        .sidebar-brand-subtitle {
+            font-size: 12px;
+            color: var(--color-text-muted);
+            font-weight: 500;
+        }
+        
+        .sidebar-nav {
+            padding: 1rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+        
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .nav-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-text-muted);
+            padding: 0.5rem 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.625rem 0.75rem;
+            border-radius: var(--radius-md);
+            color: var(--color-text-muted);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .nav-item:hover {
+            background: var(--color-card-hover);
+            color: var(--color-text);
+        }
+        
+        .nav-item.active {
+            background: var(--color-primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+        
+        .nav-item i {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .sidebar-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--color-border);
+        }
+        
+        .callie-status {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+        }
+        
+        .callie-status .ai-orb {
+            width: 32px;
+            height: 32px;
+        }
+        
+        .callie-status-text {
+            flex: 1;
+        }
+        
+        .callie-status-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+        
+        .callie-status-status {
+            font-size: 11px;
+            color: var(--color-success);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: background var(--transition-fast);
+        }
+        
+        .user-profile:hover {
+            background: var(--color-card-hover);
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+        
+        .user-role {
+            font-size: 11px;
+            color: var(--color-text-muted);
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Top Bar */
+        .top-bar {
+            background: var(--color-sidebar);
+            border-bottom: 1px solid var(--color-border);
+            padding: 0 1.5rem;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: var(--z-sticky);
+        }
+        
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--color-text);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--radius-md);
+            transition: background var(--transition-fast);
+        }
+        
+        .menu-toggle:hover {
+            background: var(--color-card-hover);
+        }
+        
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 13px;
+            color: var(--color-text-muted);
+        }
+        
+        .breadcrumb a {
+            color: var(--color-text-muted);
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--color-text);
+        }
+        
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+        
+        .search-bar {
+            position: relative;
+            width: 280px;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            font-size: 14px;
+            color: var(--color-text);
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            transition: border-color var(--transition-fast);
+        }
+        
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+        
+        .search-bar i {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-text-muted);
+            width: 16px;
+            height: 16px;
+        }
+        
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+            position: relative;
+        }
+        
+        .icon-btn:hover {
+            background: var(--color-card-hover);
+            color: var(--color-text);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: 0.25rem;
+            right: 0.25rem;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-error);
+            border: 2px solid var(--color-sidebar);
+        }
+        
+        .profile-dropdown {
+            position: relative;
+        }
+        
+        .profile-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            width: 200px;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 0.5rem;
+            z-index: var(--z-dropdown);
+            display: none;
+        }
+        
+        .profile-dropdown-menu.show {
+            display: block;
+        }
+        
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius-md);
+            color: var(--color-text);
+            text-decoration: none;
+            font-size: 14px;
+            transition: background var(--transition-fast);
+        }
+        
+        .dropdown-item:hover {
+            background: var(--color-card-hover);
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: var(--color-border);
+            margin: 0.5rem 0;
+        }
+        
+        /* Page Content */
+        .page-content {
+            flex: 1;
+            padding: 1.5rem;
+        }
+        
+        .page-header {
+            margin-bottom: 1.5rem;
+        }
+        
+        .page-title-large {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-description {
+            font-size: 14px;
+            color: var(--color-text-muted);
+        }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .search-bar {
+                display: none;
+            }
+            
+            .page-content {
+                padding: 1rem;
+            }
+            
+            .page-title-large {
+                font-size: 24px;
+            }
+        }
+        
+        /* Overlay for mobile sidebar */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: var(--z-modal-backdrop);
+        }
+        
+        .sidebar-overlay.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="{% url 'dashboard:home' %}" class="sidebar-brand">
+                <div class="ai-orb">
+                    <i data-lucide="sparkles" style="width: 20px; height: 20px; color: white;"></i>
+                </div>
+                <div>
+                    <div class="sidebar-brand-text">CALLIE</div>
+                    <div class="sidebar-brand-subtitle">AI Receptionist</div>
+                </div>
+            </a>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <a href="{% url 'dashboard:home' %}" class="nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                    <i data-lucide="layout-dashboard"></i>
+                    Dashboard
+                </a>
+                <a href="{% url 'calls:list' %}" class="nav-item {% if request.resolver_match.app_name == 'calls' %}active{% endif %}">
+                    <i data-lucide="phone"></i>
+                    Calls
+                </a>
+                <a href="{% url 'conversations:list' %}" class="nav-item {% if request.resolver_match.app_name == 'conversations' %}active{% endif %}">
+                    <i data-lucide="message-circle"></i>
+                    Conversations
+                </a>
+                <a href="{% url 'messages:list' %}" class="nav-item {% if request.resolver_match.app_name == 'messages' %}active{% endif %}">
+                    <i data-lucide="mail"></i>
+                    Messages
+                </a>
+                <a href="{% url 'contacts:list' %}" class="nav-item {% if request.resolver_match.app_name == 'contacts' %}active{% endif %}">
+                    <i data-lucide="users"></i>
+                    Contacts
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Knowledge</div>
+                <a href="{% url 'knowledge:faqs' %}" class="nav-item {% if request.resolver_match.url_name == 'faqs' %}active{% endif %}">
+                    <i data-lucide="help-circle"></i>
+                    FAQs
+                </a>
+                <a href="{% url 'knowledge:knowledge_base' %}" class="nav-item {% if request.resolver_match.url_name == 'knowledge_base' %}active{% endif %}">
+                    <i data-lucide="book-open"></i>
+                    Knowledge Base
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Insights</div>
+                <a href="{% url 'analytics:home' %}" class="nav-item {% if request.resolver_match.app_name == 'analytics' %}active{% endif %}">
+                    <i data-lucide="bar-chart-3"></i>
+                    Analytics
+                </a>
+                <a href="{% url 'notifications:list' %}" class="nav-item {% if request.resolver_match.app_name == 'notifications' %}active{% endif %}">
+                    <i data-lucide="bell"></i>
+                    Notifications
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Demo</div>
+                <a href="{% url 'demo:home' %}" class="nav-item {% if request.resolver_match.app_name == 'demo' %}active{% endif %}">
+                    <i data-lucide="play"></i>
+                    Live Demo
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">System</div>
+                <a href="{% url 'businesses:detail' business.id %}" class="nav-item">
+                    <i data-lucide="settings"></i>
+                    Settings
+                </a>
+            </div>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="callie-status">
+                <div class="ai-orb">
+                    <i data-lucide="sparkles" style="width: 16px; height: 16px; color: white;"></i>
+                </div>
+                <div class="callie-status-text">
+                    <div class="callie-status-name">Callie</div>
+                    <div class="callie-status-status">
+                        <span class="status-online"></span>
+                        Online
+                    </div>
+                </div>
+            </div>
+            
+            <div class="user-profile">
+                <div class="user-avatar">
+                    {{ user.first_name|first }}{{ user.last_name|first }}
+                </div>
+                <div class="user-info">
+                    <div class="user-name">{{ user.get_full_name }}</div>
+                    <div class="user-role">{{ user.get_role_display }}</div>
+                </div>
+                <i data-lucide="chevron-down" style="width: 16px; height: 16px; color: var(--color-text-muted);"></i>
+            </div>
+        </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="top-bar-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i data-lucide="menu" style="width: 20px; height: 20px;"></i>
+                </button>
+                <div class="breadcrumb">
+                    <i data-lucide="home" style="width: 14px; height: 14px;"></i>
+                    <span>/</span>
+                    <span>{% block breadcrumb %}Dashboard{% endblock %}</span>
+                </div>
+            </div>
+            
+            <div class="top-bar-right">
+                <div class="search-bar">
+                    <i data-lucide="search" style="width: 16px; height: 16px;"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+                
+                <button class="icon-btn">
+                    <i data-lucide="help-circle" style="width: 20px; height: 20px;"></i>
+                </button>
+                
+                <button class="icon-btn">
+                    <i data-lucide="bell" style="width: 20px; height: 20px;"></i>
+                    <span class="notification-badge"></span>
+                </button>
+                
+                <div class="profile-dropdown">
+                    <button class="icon-btn" id="profileToggle">
+                        <i data-lucide="user" style="width: 20px; height: 20px;"></i>
+                    </button>
+                    <div class="profile-dropdown-menu" id="profileDropdown">
+                        <div class="dropdown-item">
+                            <i data-lucide="user" style="width: 16px; height: 16px;"></i>
+                            {{ user.get_full_name }}
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="{% url 'accounts:profile' %}" class="dropdown-item">
+                            <i data-lucide="settings" style="width: 16px; height: 16px;"></i>
+                            Settings
+                        </a>
+                        <a href="{% url 'accounts:logout' %}" class="dropdown-item" style="color: var(--color-error);">
+                            <i data-lucide="log-out" style="width: 16px; height: 16px;"></i>
+                            Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Page Content -->
+        <main class="page-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    {% else %}
+    <!-- Public Pages -->
+    <main class="page-content">
+        {% block public_content %}{% endblock %}
+    </main>
+    {% endif %}
+    
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+    
+    <!-- Scripts -->
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Mobile sidebar toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('mobile-open');
+                sidebarOverlay.classList.toggle('show');
+            });
+        }
+        
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.remove('mobile-open');
+                sidebarOverlay.classList.remove('show');
+            });
+        }
+        
+        // Profile dropdown toggle
+        const profileToggle = document.getElementById('profileToggle');
+        const profileDropdown = document.getElementById('profileDropdown');
+        
+        if (profileToggle && profileDropdown) {
+            profileToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('show');
+            });
+            
+            document.addEventListener('click', () => {
+                profileDropdown.classList.remove('show');
+            });
+        }
+        
+        // Toast system
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const icons = {
+                success: 'check-circle',
+                error: 'x-circle',
+                warning: 'alert-triangle',
+                info: 'info'
+            };
+            
+            const colors = {
+                success: 'var(--color-success)',
+                error: 'var(--color-error)',
+                warning: 'var(--color-warning)',
+                info: 'var(--color-primary)'
+            };
+            
+            toast.className = 'card flex items-center gap-3 shadow-lg';
+            toast.style.minWidth = '300px';
+            toast.innerHTML = `
+                <i data-lucide="${icons[type]}" style="width: 20px; height: 20px; color: ${colors[type]};"></i>
+                <span style="flex: 1; font-size: 14px;">${message}</span>
+                <button class="icon-btn" onclick="this.parentElement.remove()">
+                    <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+                </button>
+            `;
+            
+            container.appendChild(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 5000);
+        }
+        
+        // Django messages to toasts
+        {% if messages %}
+        {% for message in messages %}
+        showToast('{{ message }}', '{{ message.tags }}');
+        {% endfor %}
+        {% endif %}
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

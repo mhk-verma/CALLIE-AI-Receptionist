@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ contact.name }} - CALLIE{% endblock %}
+{% block breadcrumb %}Contacts / {{ contact.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <div class="mb-6">
+        <a href="{% url 'contacts:list' %}" class="btn btn-ghost">
+            <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+            Back to Contacts
+        </a>
+    </div>
+    
+    <!-- Contact Header -->
+    <div class="card mb-6">
+        <div class="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="user-avatar" style="width: 80px; height: 80px; font-size: 32px;">
+                    {{ contact.name|first|upper }}
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold">{{ contact.name }}</h1>
+                    <div class="text-muted">{{ contact.company|default:"Individual" }}</div>
+                </div>
+            </div>
+            
+            <div class="flex gap-2">
+                <a href="tel:{{ contact.phone }}" class="btn btn-primary">
+                    <i data-lucide="phone" style="width: 16px; height: 16px;"></i>
+                    Call
+                </a>
+                <a href="mailto:{{ contact.email }}" class="btn btn-secondary">
+                    <i data-lucide="mail" style="width: 16px; height: 16px;"></i>
+                    Email
+                </a>
+                <a href="{% url 'contacts:edit' contact.id %}" class="btn btn-secondary">
+                    <i data-lucide="edit" style="width: 16px; height: 16px;"></i>
+                    Edit
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Main Content -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Contact Information -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Contact Information</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <div class="text-xs text-muted mb-1">Phone</div>
+                        <div class="font-medium">{{ contact.phone|default:"--" }}</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted mb-1">Email</div>
+                        <div class="font-medium">{{ contact.email|default:"--" }}</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted mb-1">Company</div>
+                        <div class="font-medium">{{ contact.company|default:"--" }}</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted mb-1">Source</div>
+                        <div>
+                            <span class="badge badge-neutral">{{ contact.get_source_display }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tags -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Tags</h3>
+                </div>
+                <div class="flex gap-2 flex-wrap">
+                    {% for tag in contact.tags %}
+                    <span class="badge badge-primary">{{ tag }}</span>
+                    {% empty %}
+                    <span class="text-sm text-muted">No tags</span>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Notes -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Notes</h3>
+                </div>
+                <div class="text-sm">
+                    {{ contact.notes|default:"No notes" }}
+                </div>
+            </div>
+            
+            <!-- Recent Conversations -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Recent Conversations</h3>
+                </div>
+                <div class="space-y-3">
+                    {% for conversation in contact.conversations.all|slice:":5" %}
+                    <div class="flex items-center gap-3 p-3 bg-background rounded-lg border border-border hover:bg-card-hover transition cursor-pointer">
+                        <div class="flex-1">
+                            <div class="text-sm font-medium">{{ conversation.get_channel_display }}</div>
+                            <div class="text-xs text-muted">{{ conversation.summary|default:"No summary" }}</div>
+                        </div>
+                        <div class="text-xs text-muted">{{ conversation.started_at|timesince }}</div>
+                    </div>
+                    {% empty %}
+                    <div class="text-center py-4 text-muted">
+                        <p class="text-sm">No conversations yet</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="space-y-6">
+            <!-- Activity -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Activity</h3>
+                </div>
+                <div class="space-y-3">
+                    <div>
+                        <div class="text-xs text-muted mb-1">Last Interaction</div>
+                        <div class="text-sm">{{ contact.last_interaction|date:"M d, Y g:i A"|default:"--" }}</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted mb-1">Created</div>
+                        <div class="text-sm">{{ contact.created_at|date:"M d, Y" }}</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted mb-1">Total Conversations</div>
+                        <div class="text-sm font-medium">{{ contact.conversations.count }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Quick Actions</h3>
+                </div>
+                <div class="space-y-2">
+                    <button class="btn btn-secondary w-full">
+                        <i data-lucide="message-square" style="width: 16px; height: 16px;"></i>
+                        Send Message
+                    </button>
+                    <button class="btn btn-secondary w-full">
+                        <i data-lucide="phone" style="width: 16px; height: 16px;"></i>
+                        Schedule Call
+                    </button>
+                    <button class="btn btn-secondary w-full">
+                        <i data-lucide="tag" style="width: 16px; height: 16px;"></i>
+                        Add Tag
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Call History -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Call History</h3>
+                </div>
+                <div class="space-y-2">
+                    {% for call in contact.calls.all|slice:":3" %}
+                    <div class="flex items-center gap-2 text-sm">
+                        <i data-lucide="phone" style="width: 14px; height: 14px; color: var(--color-primary);"></i>
+                        <span>{{ call.created_at|date:"M d" }}</span>
+                        <span class="badge badge-neutral">{{ call.status }}</span>
+                    </div>
+                    {% empty %}
+                    <div class="text-sm text-muted">No call history</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

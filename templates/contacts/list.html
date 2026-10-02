@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Contacts - CALLIE{% endblock %}
+{% block breadcrumb %}Contacts{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title-large">Contacts</h1>
+    <p class="page-description">Manage your customer relationships</p>
+</div>
+
+<!-- Toolbar -->
+<div class="card mb-6">
+    <div class="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+        <div class="flex-1 w-full md:w-auto">
+            <div class="search-bar">
+                <i data-lucide="search" style="width: 16px; height: 16px;"></i>
+                <input type="text" placeholder="Search contacts...">
+            </div>
+        </div>
+        
+        <div class="flex gap-2 w-full md:w-auto">
+            <select class="form-control form-select" style="width: auto;">
+                <option value="">All Sources</option>
+                <option value="call">Call</option>
+                <option value="message">Message</option>
+                <option value="website">Website</option>
+                <option value="manual">Manual</option>
+            </select>
+            
+            <a href="{% url 'contacts:create' %}" class="btn btn-primary">
+                <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+                Add Contact
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Contacts Table -->
+<div class="card">
+    <div class="overflow-x-auto">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Company</th>
+                    <th>Source</th>
+                    <th>Tags</th>
+                    <th>Last Interaction</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contact in contacts %}
+                <tr>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="user-avatar" style="width: 36px; height: 36px; font-size: 12px;">
+                                {{ contact.name|first|upper }}
+                            </div>
+                            <div class="font-medium text-sm">{{ contact.name }}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="text-sm">{{ contact.phone|default:"--" }}</span>
+                    </td>
+                    <td>
+                        <span class="text-sm">{{ contact.email|default:"--" }}</span>
+                    </td>
+                    <td>
+                        <span class="text-sm">{{ contact.company|default:"--" }}</span>
+                    </td>
+                    <td>
+                        <span class="badge badge-neutral">{{ contact.get_source_display }}</span>
+                    </td>
+                    <td>
+                        <div class="flex gap-1 flex-wrap">
+                            {% for tag in contact.tags %}
+                            <span class="badge badge-primary" style="font-size: 11px;">{{ tag }}</span>
+                            {% empty %}
+                            <span class="text-xs text-muted">--</span>
+                            {% endfor %}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="text-sm">{{ contact.last_interaction|date:"M d"|default:"--" }}</span>
+                    </td>
+                    <td>
+                        <div class="flex gap-1">
+                            <a href="{% url 'contacts:detail' contact.id %}" class="btn btn-ghost btn-sm">
+                                <i data-lucide="eye" style="width: 16px; height: 16px;"></i>
+                            </a>
+                            <a href="{% url 'contacts:edit' contact.id %}" class="btn btn-ghost btn-sm">
+                                <i data-lucide="edit" style="width: 16px; height: 16px;"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-8">
+                        <div class="text-muted">
+                            <i data-lucide="users" style="width: 48px; height: 48px; margin: 0 auto 1rem; opacity: 0.5;"></i>
+                            <p>No contacts yet</p>
+                            <a href="{% url 'contacts:create' %}" class="btn btn-primary btn-sm mt-4">
+                                <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
+                                Add Contact
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

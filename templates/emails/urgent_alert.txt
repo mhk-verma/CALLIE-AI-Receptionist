@@ -1,0 +1,11 @@
+URGENT ALERT - {{ business_name }}
+
+Urgency Level: {{ urgency_level }}
+
+Reason: {{ reason }}
+
+Conversation ID: {{ conversation_id }}
+
+Please check your dashboard for more details and take appropriate action.
+
+This is an automated message from AI Receptionist.

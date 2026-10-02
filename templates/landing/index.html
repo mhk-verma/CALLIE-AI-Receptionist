@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CALLIE - AI Receptionist | Your Virtual Receptionist 24/7</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Design System -->
+    <link rel="stylesheet" href="/static/css/design-system.css">
+    
+    <style>
+        /* Landing Page Specific Styles */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-50px, 50px); }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+        
+        .hero-title {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--color-text-muted);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: var(--z-sticky);
+            background: rgba(11, 17, 32, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .nav-link {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color var(--transition-fast);
+        }
+        
+        .nav-link:hover {
+            color: var(--color-text);
+        }
+        
+        .section {
+            padding: 5rem 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--color-text-muted);
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            padding: 2rem;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            transition: all var(--transition-normal);
+        }
+        
+        .feature-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-4px);
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            background: var(--gradient-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-icon i {
+            color: var(--color-primary);
+        }
+        
+        .feature-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .feature-description {
+            font-size: 14px;
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+        
+        .how-it-works {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .step-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .step-description {
+            font-size: 14px;
+            color: var(--color-text-muted);
+        }
+        
+        .step-connector {
+            width: 2px;
+            height: 40px;
+            background: var(--color-border);
+            margin-left: 23px;
+        }
+        
+        .cta-section {
+            background: var(--gradient-subtle);
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .trust-section {
+            background: var(--color-card);
+            border-top: 1px solid var(--color-border);
+        }
+        
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .trust-item {
+            text-align: center;
+        }
+        
+        .trust-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 1rem;
+            color: var(--color-success);
+        }
+        
+        .trust-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .trust-description {
+            font-size: 13px;
+            color: var(--color-text-muted);
+        }
+        
+        .footer {
+            background: var(--color-sidebar);
+            border-top: 1px solid var(--color-border);
+            padding: 3rem 1.5rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-brand {
+            margin-bottom: 1rem;
+        }
+        
+        .footer-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color var(--transition-fast);
+        }
+        
+        .footer-links a:hover {
+            color: var(--color-text);
+        }
+        
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+            font-size: 13px;
+            color: var(--color-text-muted);
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 36px;
+            }
+            
+            .hero-subtitle {
+                font-size: 16px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+            
+            .step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .step-connector {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="#" class="nav-brand">
+                <div class="ai-orb" style="width: 32px; height: 32px;">
+                    <i data-lucide="sparkles" style="width: 16px; height: 16px; color: white;"></i>
+                </div>
+                <div>
+                    <div style="font-size: 16px; font-weight: 700; color: var(--color-text);">CALLIE</div>
+                    <div style="font-size: 11px; color: var(--color-text-muted);">AI Receptionist</div>
+                </div>
+            </a>
+            
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#trust" class="nav-link">Trust</a>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <a href="{% url 'accounts:login' %}" class="btn btn-ghost">Login</a>
+                <a href="{% url 'accounts:signup' %}" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="hero-content">
+                <h1 class="hero-title">Your AI Receptionist,<br>Available 24/7</h1>
+                <p class="hero-subtitle">
+                    Answer calls, handle customer messages, answer FAQs and never miss an important customer again. Callie works tirelessly so you don't have to.
+                </p>
+                <div class="hero-cta">
+                    <a href="{% url 'accounts:signup' %}" class="btn btn-primary btn-lg">
+                        <i data-lucide="rocket" style="width: 18px; height: 18px;"></i>
+                        Get Started Free
+                    </a>
+                    <a href="{% url 'demo:home' %}" class="btn btn-secondary btn-lg">
+                        <i data-lucide="play" style="width: 18px; height: 18px;"></i>
+                        Try Live Demo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <h2 class="section-title">Powerful Features</h2>
+        <p class="section-subtitle">Everything you need to manage customer communications intelligently</p>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="phone" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="feature-title">AI Phone Receptionist</h3>
+                <p class="feature-description">Intelligent voice assistant that answers calls, understands questions, and provides helpful responses instantly.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="clock" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="feature-title">24/7 Availability</h3>
+                <p class="feature-description">Never miss a call or message. Your AI receptionist is always available to help your customers.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="help-circle" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="feature-title">Automatic FAQ Answers</h3>
+                <p class="feature-description">Configure your FAQs and let the AI handle common questions automatically and accurately.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="message-square" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="feature-title">Smart Message Handling</h3>
+                <p class="feature-description">Manage SMS, WhatsApp, Instagram DMs, and website chat from one unified dashboard.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="alert-triangle" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="feature-title">Urgent Issue Detection</h3>
+                <p class="feature-description">Automatically detect urgent situations and escalate to human staff when needed.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="history" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="feature-title">Conversation History</h3>
+                <p class="feature-description">Complete history of all interactions with AI-generated summaries and insights.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works -->
+    <section class="section" id="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">Simple setup, powerful results in minutes</p>
+        
+        <div class="how-it-works">
+            <div class="step">
+                <div class="step-number">01</div>
+                <div class="step-content">
+                    <h3 class="step-title">Customer Calls</h3>
+                    <p class="step-description">Customer calls your business number at any time.</p>
+                </div>
+            </div>
+            <div class="step-connector"></div>
+            
+            <div class="step">
+                <div class="step-number">02</div>
+                <div class="step-content">
+                    <h3 class="step-title">Callie Answers</h3>
+                    <p class="step-description">AI receptionist answers immediately with a professional greeting.</p>
+                </div>
+            </div>
+            <div class="step-connector"></div>
+            
+            <div class="step">
+                <div class="step-number">03</div>
+                <div class="step-content">
+                    <h3 class="step-title">AI Understands Request</h3>
+                    <p class="step-description">Callie understands the customer's question using advanced AI.</p>
+                </div>
+            </div>
+            <div class="step-connector"></div>
+            
+            <div class="step">
+                <div class="step-number">04</div>
+                <div class="step-content">
+                    <h3 class="step-title">AI Resolves or Escalates</h3>
+                    <p class="step-description">Callie handles the request or escalates to human staff if needed.</p>
+                </div>
+            </div>
+            <div class="step-connector"></div>
+            
+            <div class="step">
+                <div class="step-number">05</div>
+                <div class="step-content">
+                    <h3 class="step-title">Business Owner Gets Update</h3>
+                    <p class="step-description">You receive a notification with a summary of the interaction.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Trust Section -->
+    <section class="section trust-section" id="trust">
+        <h2 class="section-title">Built for Trust & Security</h2>
+        <p class="section-subtitle">Enterprise-grade security for your customer communications</p>
+        
+        <div class="trust-grid">
+            <div class="trust-item">
+                <i data-lucide="shield-check" class="trust-icon"></i>
+                <h3 class="trust-title">Secure Authentication</h3>
+                <p class="trust-description">Role-based access control with encrypted credentials</p>
+            </div>
+            
+            <div class="trust-item">
+                <i data-lucide="lock" class="trust-icon"></i>
+                <h3 class="trust-title">Protected Data</h3>
+                <p class="trust-description">Your business data is encrypted and isolated</p>
+            </div>
+            
+            <div class="trust-item">
+                <i data-lucide="webhook" class="trust-icon"></i>
+                <h3 class="trust-title">Webhook Validation</h3>
+                <p class="trust-description">Secure integration with third-party services</p>
+            </div>
+            
+            <div class="trust-item">
+                <i data-lucide="key" class="trust-icon"></i>
+                <h3 class="trust-title">Environment Secrets</h3>
+                <p class="trust-description">API keys stored securely, never in code</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="section cta-section">
+        <div class="text-center max-w-2xl mx-auto">
+            <h2 class="section-title">Ready to Transform Your Customer Service?</h2>
+            <p class="section-subtitle">Join businesses using Callie to improve customer satisfaction and never miss an important call again.</p>
+            <div class="flex justify-center gap-4">
+                <a href="{% url 'accounts:signup' %}" class="btn btn-primary btn-lg">
+                    <i data-lucide="rocket" style="width: 18px; height: 18px;"></i>
+                    Get Started Free
+                </a>
+                <a href="{% url 'demo:home' %}" class="btn btn-secondary btn-lg">
+                    <i data-lucide="play" style="width: 18px; height: 18px;"></i>
+                    Try Demo
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="ai-orb" style="width: 32px; height: 32px;">
+                        <i data-lucide="sparkles" style="width: 16px; height: 16px; color: white;"></i>
+                    </div>
+                    <div>
+                        <div style="font-size: 16px; font-weight: 700; color: var(--color-text);">CALLIE</div>
+                        <div style="font-size: 11px; color: var(--color-text-muted);">AI Receptionist</div>
+                    </div>
+                </div>
+                <p style="font-size: 13px; color: var(--color-text-muted); max-width: 250px;">
+                    Your virtual receptionist, available 24/7 to handle customer communications.
+                </p>
+            </div>
+            
+            <div>
+                <h4 class="footer-title">Product</h4>
+                <ul class="footer-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="{% url 'demo:home' %}">Demo</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="footer-title">Company</h4>
+                <ul class="footer-links">
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="footer-title">Legal</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Terms</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 CALLIE. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        lucide.createIcons();
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

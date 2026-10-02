@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}FAQs - CALLIE{% endblock %}
+{% block breadcrumb %}Knowledge / FAQs{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title-large">Frequently Asked Questions</h1>
+    <p class="page-description">Manage the information Callie uses to answer customers</p>
+</div>
+
+<!-- Stats -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="card">
+        <div class="text-sm text-muted mb-1">Total FAQs</div>
+        <div class="text-2xl font-bold">{{ faqs|length }}</div>
+    </div>
+    <div class="card">
+        <div class="text-sm text-muted mb-1">Active</div>
+        <div class="text-2xl font-bold text-success">{{ faqs|length }}</div>
+    </div>
+    <div class="card">
+        <div class="text-sm text-muted mb-1">Categories</div>
+        <div class="text-2xl font-bold">{{ faqs|length }}</div>
+    </div>
+</div>
+
+<!-- FAQ List -->
+<div class="card mb-6">
+    <div class="card-header">
+        <div class="flex items-center justify-between">
+            <h3 class="card-title">Your FAQs</h3>
+            <a href="{% url 'knowledge:faq_create' %}" class="btn btn-primary btn-sm">
+                <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
+                Add FAQ
+            </a>
+        </div>
+    </div>
+    
+    <div class="space-y-3">
+        {% for faq in faqs %}
+        <div class="flex items-start gap-4 p-4 bg-background rounded-lg border border-border hover:bg-card-hover transition">
+            <div class="flex-1">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="font-medium text-sm">{{ faq.question }}</span>
+                    {% if faq.is_active %}
+                    <span class="badge badge-success" style="font-size: 10px;">Active</span>
+                    {% else %}
+                    <span class="badge badge-neutral" style="font-size: 10px;">Inactive</span>
+                    {% endif %}
+                </div>
+                <div class="text-sm text-muted mb-2">{{ faq.answer|truncatewords:15 }}</div>
+                <div class="flex items-center gap-3">
+                    <span class="badge badge-neutral" style="font-size: 11px;">{{ faq.get_category_display }}</span>
+                    <span class="text-xs text-muted">Priority: {{ faq.priority }}</span>
+                    <span class="text-xs text-muted">Views: {{ faq.view_count }}</span>
+                </div>
+            </div>
+            
+            <div class="flex gap-1">
+                <a href="{% url 'knowledge:faq_edit' faq.id %}" class="btn btn-ghost btn-sm">
+                    <i data-lucide="edit" style="width: 16px; height: 16px;"></i>
+                </a>
+                <a href="{% url 'knowledge:faq_delete' faq.id %}" class="btn btn-ghost btn-sm text-error">
+                    <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-8 text-muted">
+            <i data-lucide="help-circle" style="width: 48px; height: 48px; margin: 0 auto 1rem; opacity: 0.5;"></i>
+            <p>No FAQs yet</p>
+            <a href="{% url 'knowledge:faq_create' %}" class="btn btn-primary btn-sm mt-4">
+                <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
+                Add Your First FAQ
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Categories -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Categories</h3>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="p-3 bg-background rounded-lg border border-border text-center">
+            <div class="text-lg font-bold">General</div>
+            <div class="text-xs text-muted">{{ faqs|length }} FAQs</div>
+        </div>
+        <div class="p-3 bg-background rounded-lg border border-border text-center">
+            <div class="text-lg font-bold">Hours</div>
+            <div class="text-xs text-muted">{{ faqs|length }} FAQs</div>
+        </div>
+        <div class="p-3 bg-background rounded-lg border border-border text-center">
+            <div class="text-lg font-bold">Pricing</div>
+            <div class="text-xs text-muted">{{ faqs|length }} FAQs</div>
+        </div>
+        <div class="p-3 bg-background rounded-lg border border-border text-center">
+            <div class="text-lg font-bold">Services</div>
+            <div class="text-xs text-muted">{{ faqs|length }} FAQs</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

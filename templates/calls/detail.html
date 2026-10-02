@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+
+{% block title %}Call Details - CALLIE{% endblock %}
+{% block breadcrumb %}Calls / Details{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <div class="mb-6">
+        <a href="{% url 'calls:list' %}" class="btn btn-ghost">
+            <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+            Back to Calls
+        </a>
+    </div>
+    
+    <!-- Call Header -->
+    <div class="card mb-6">
+        <div class="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="user-avatar" style="width: 64px; height: 64px; font-size: 24px;">
+                    {{ call.caller_name|first|default:call.phone_number|first|upper }}
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold">{{ call.caller_name|default:call.phone_number }}</h1>
+                    <div class="text-muted">{{ call.phone_number }}</div>
+                </div>
+            </div>
+            
+            <div class="flex gap-2">
+                {% if call.status == 'missed' %}
+                <a href="tel:{{ call.phone_number }}" class="btn btn-primary">
+                    <i data-lucide="phone" style="width: 16px; height: 16px;"></i>
+                    Call Back
+                </a>
+                {% endif %}
+                <button class="btn btn-secondary">
+                    <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+                    Download Recording
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Main Content -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Call Info -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Call Information</h3>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <div class="text-xs text-muted mb-1">Date</div>
+                        <div class="font-medium">{{ call.created_at|date:"M d, Y" }}</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted mb-1">Time</div>
+                        <div class="font-medium">{{ call.created_at|time:"g:i A" }}</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted mb-1">Duration</div>
+                        <div class="font-medium">{{ call.duration|default:"--" }}s</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted mb-1">Status</div>
+                        <div>
+                            {% if call.status == 'answered' %}
+                            <span class="badge badge-success">Answered</span>
+                            {% elif call.status == 'missed' %}
+                            <span class="badge badge-error">Missed</span>
+                            {% elif call.status == 'escalated' %}
+                            <span class="badge badge-warning">Escalated</span>
+                            {% else %}
+                            <span class="badge badge-neutral">{{ call.status|title }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted mb-1">Urgency</div>
+                        <div>
+                            {% if call.urgency == 'normal' %}
+                            <span class="badge badge-neutral">Normal</span>
+                            {% elif call.urgency == 'important' %}
+                            <span class="badge badge-primary">Important</span>
+                            {% elif call.urgency == 'urgent' %}
+                            <span class="badge badge-urgent">Urgent</span>
+                            {% elif call.urgency == 'emergency' %}
+                            <span class="badge badge-error">Emergency</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted mb-1">Handled By</div>
+                        <div>
+                            {% if call.handled_by == 'ai' %}
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="sparkles" style="width: 14px; height: 14px; color: var(--color-primary);"></i>
+                                AI
+                            </span>
+                            {% else %}
+                            <span>Human</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Transcript -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Transcript</h3>
+                </div>
+                <div class="space-y-4 max-h-96 overflow-y-auto">
+                    {% for transcript in call.transcripts.all %}
+                    <div class="flex {% if transcript.speaker == 'customer' %}justify-end{% else %}justify-start{% endif %}">
+                        <div class="{% if transcript.speaker == 'customer' %}bg-blue-500/10 text-blue-400{% else %}bg-purple-500/10 text-purple-400{% endif %} rounded-lg px-4 py-3 max-w-md">
+                            <div class="text-xs font-semibold mb-1 {% if transcript.speaker == 'ai' %}flex items-center gap-1{% endif %}">
+                                {% if transcript.speaker == 'ai' %}
+                                <i data-lucide="sparkles" style="width: 12px; height: 12px;"></i>
+                                {% endif %}
+                                {{ transcript.get_speaker_display }}
+                            </div>
+                            <div class="text-sm">{{ transcript.content }}</div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="text-center py-8 text-muted">
+                        <i data-lucide="file-text" style="width: 48px; height: 48px; margin: 0 auto 1rem; opacity: 0.5;"></i>
+                        <p>No transcript available</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="space-y-6">
+            <!-- AI Summary -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">AI Summary</h3>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <div class="text-xs text-muted mb-1">Summary</div>
+                        <div class="text-sm">{{ call.summary|default:"No summary available" }}</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted mb-1">Intent</div>
+                        <div class="text-sm font-medium">{{ call.customer_intent|default:"--" }}</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted mb-1">Resolution</div>
+                        <div class="text-sm">{{ call.resolution|default:"--" }}</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted mb-1">Follow-up Required</div>
+                        <div>
+                            {% if call.follow_up_required %}
+                            <span class="badge badge-warning">Yes</span>
+                            {% else %}
+                            <span class="badge badge-success">No</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Follow-up Notes -->
+            {% if call.follow_up_required %}
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Follow-up Notes</h3>
+                </div>
+                <div class="text-sm">
+                    {{ call.follow_up_notes|default:"No notes" }}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Actions</h3>
+                </div>
+                <div class="space-y-2">
+                    <button class="btn btn-secondary w-full">
+                        <i data-lucide="message-square" style="width: 16px; height: 16px;"></i>
+                        Send Message
+                    </button>
+                    <button class="btn btn-secondary w-full">
+                        <i data-lucide="user-plus" style="width: 16px; height: 16px;"></i>
+                        Add to Contacts
+                    </button>
+                    <button class="btn btn-secondary w-full">
+                        <i data-lucide="flag" style="width: 16px; height: 16px;"></i>
+                        Flag for Review
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

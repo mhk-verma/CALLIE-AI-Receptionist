@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - CALLIE</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Design System -->
+    <link rel="stylesheet" href="/static/css/design-system.css">
+    
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.1;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-30px, 30px); }
+        }
+        
+        .auth-card {
+            width: 100%;
+            max-width: 480px;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .auth-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .auth-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .auth-subtitle {
+            font-size: 14px;
+            color: var(--color-text-muted);
+        }
+        
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--color-text);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 14px;
+            color: var(--color-text);
+            background: var(--color-background);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            transition: border-color var(--transition-fast);
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .form-group input::placeholder {
+            color: var(--color-text-muted);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .auth-footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 14px;
+            color: var(--color-text-muted);
+        }
+        
+        .auth-footer a {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .auth-footer a:hover {
+            color: var(--color-primary-hover);
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            color: var(--color-text-muted);
+            font-size: 13px;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--color-border);
+        }
+        
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 1.5rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .auth-title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <div class="ai-orb" style="width: 48px; height: 48px;">
+                        <i data-lucide="sparkles" style="width: 24px; height: 24px; color: white;"></i>
+                    </div>
+                    <div>
+                        <div style="font-size: 20px; font-weight: 700; color: var(--color-text);">CALLIE</div>
+                        <div style="font-size: 12px; color: var(--color-text-muted);">AI Receptionist</div>
+                    </div>
+                </div>
+                <h1 class="auth-title">Create your account</h1>
+                <p class="auth-subtitle">Start your free trial today. No credit card required.</p>
+            </div>
+            
+            <form method="post" class="auth-form">
+                {% csrf_token %}
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_first_name">First Name</label>
+                        <input 
+                            type="text" 
+                            name="first_name" 
+                            id="id_first_name" 
+                            placeholder="John"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_last_name">Last Name</label>
+                        <input 
+                            type="text" 
+                            name="last_name" 
+                            id="id_last_name" 
+                            placeholder="Doe"
+                            required
+                        >
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_email">Email</label>
+                    <input 
+                        type="email" 
+                        name="email" 
+                        id="id_email" 
+                        placeholder="you@example.com"
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_phone">Phone (optional)</label>
+                    <input 
+                        type="tel" 
+                        name="phone" 
+                        id="id_phone" 
+                        placeholder="+1 (555) 123-4567"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_password">Password</label>
+                    <input 
+                        type="password" 
+                        name="password" 
+                        id="id_password" 
+                        placeholder="••••••••"
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_confirm_password">Confirm Password</label>
+                    <input 
+                        type="password" 
+                        name="confirm_password" 
+                        id="id_confirm_password" 
+                        placeholder="••••••••"
+                        required
+                    >
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-lg">
+                    Create Account
+                </button>
+            </form>
+            
+            <div class="divider">or</div>
+            
+            <div class="auth-footer">
+                Already have an account? 
+                <a href="{% url 'accounts:login' %}">Sign in</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        lucide.createIcons();
+        
+        // Password confirmation
+        const password = document.getElementById('id_password');
+        const confirmPassword = document.getElementById('id_confirm_password');
+        
+        if (confirmPassword) {
+            confirmPassword.addEventListener('input', function() {
+                if (this.value !== password.value) {
+                    this.setCustomValidity('Passwords do not match');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

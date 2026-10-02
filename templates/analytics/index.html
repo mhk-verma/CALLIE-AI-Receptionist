@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block title %}Analytics - CALLIE{% endblock %}
+{% block breadcrumb %}Analytics{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title-large">Analytics</h1>
+    <p class="page-description">Understand how Callie is performing</p>
+</div>
+
+<!-- Date Filter -->
+<div class="card mb-6">
+    <div class="flex items-center gap-4">
+        <div class="flex gap-2">
+            <button class="btn {% if date_range == 'today' %}btn-primary{% else %}btn-secondary{% endif %} btn-sm">Today</button>
+            <button class="btn {% if date_range == '7' %}btn-primary{% else %}btn-secondary{% endif %} btn-sm">7 Days</button>
+            <button class="btn {% if date_range == '30' %}btn-primary{% else %}btn-secondary{% endif %} btn-sm">30 Days</button>
+        </div>
+        
+        <div class="flex-1"></div>
+        
+        <div class="flex items-center gap-2">
+            <input type="date" class="form-control" style="width: auto;">
+            <span class="text-muted">to</span>
+            <input type="date" class="form-control" style="width: auto;">
+            <button class="btn btn-primary btn-sm">Apply</button>
+        </div>
+    </div>
+</div>
+
+<!-- Primary Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    {% include 'components/stat_card.html' with icon='phone' label='Total Calls' value=totals.calls %}
+    {% include 'components/stat_card.html' with icon='mail' label='Total Messages' value=totals.messages %}
+    {% include 'components/stat_card.html' with icon='check-circle' label='AI Resolved' value=totals.ai_resolved %}
+    {% include 'components/stat_card.html' with icon='alert-triangle' label='Escalated' value=totals.escalated %}
+</div>
+
+<!-- Charts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <!-- Call Volume Chart -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Call Volume</h3>
+        </div>
+        <div class="h-64 flex items-center justify-center">
+            <div class="text-center text-muted">
+                <i data-lucide="bar-chart-3" style="width: 48px; height: 48px; margin: 0 auto 1rem; opacity: 0.5;"></i>
+                <p>Chart visualization would go here</p>
+                <p class="text-xs mt-1">Integration with Chart.js or similar library</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- AI Resolution Rate -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">AI Resolution Rate</h3>
+        </div>
+        <div class="h-64 flex items-center justify-center">
+            <div class="text-center text-muted">
+                <i data-lucide="pie-chart" style="width: 48px; height: 48px; margin: 0 auto 1rem; opacity: 0.5;"></i>
+                <p>Resolution rate chart</p>
+                <p class="text-xs mt-1">AI vs Human resolution comparison</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Customer Intents -->
+<div class="card mb-6">
+    <div class="card-header">
+        <h3 class="card-title">Customer Intents</h3>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        {% for intent, count in intent_data.items %}
+        <div class="p-4 bg-background rounded-lg border border-border text-center">
+            <div class="text-2xl font-bold">{{ count }}</div>
+            <div class="text-xs text-muted">{{ intent|title }}</div>
+        </div>
+        {% empty %}
+        <div class="col-span-full text-center py-4 text-muted">
+            <p>No intent data available</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Channel Analytics -->
+<div class="card mb-6">
+    <div class="card-header">
+        <h3 class="card-title">Channel Distribution</h3>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {% for channel, count in channel_data.items %}
+        <div class="flex items-center gap-3 p-4 bg-background rounded-lg border border-border">
+            <div class="ai-orb" style="width: 32px; height: 32px;">
+                <i data-lucide="message-circle" style="width: 16px; height: 16px; color: white;"></i>
+            </div>
+            <div>
+                <div class="text-lg font-bold">{{ count }}</div>
+                <div class="text-xs text-muted">{{ channel|title }}</div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full text-center py-4 text-muted">
+            <p>No channel data available</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Most Common Questions -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Most Common Questions</h3>
+    </div>
+    <div class="space-y-3">
+        <div class="flex items-center gap-4 p-3 bg-background rounded-lg border border-border">
+            <div class="text-2xl font-bold text-primary">1</div>
+            <div class="flex-1">
+                <div class="font-medium text-sm">What are your opening hours?</div>
+                <div class="text-xs text-muted">45 mentions</div>
+            </div>
+            <div class="text-sm text-success">94% resolved</div>
+        </div>
+        
+        <div class="flex items-center gap-4 p-3 bg-background rounded-lg border border-border">
+            <div class="text-2xl font-bold text-primary">2</div>
+            <div class="flex-1">
+                <div class="font-medium text-sm">How can I book an appointment?</div>
+                <div class="text-xs text-muted">32 mentions</div>
+            </div>
+            <div class="text-sm text-success">89% resolved</div>
+        </div>
+        
+        <div class="flex items-center gap-4 p-3 bg-background rounded-lg border border-border">
+            <div class="text-2xl font-bold text-primary">3</div>
+            <div class="flex-1">
+                <div class="font-medium text-sm">What are your prices?</div>
+                <div class="text-xs text-muted">28 mentions</div>
+            </div>
+            <div class="text-sm text-warning">67% resolved</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

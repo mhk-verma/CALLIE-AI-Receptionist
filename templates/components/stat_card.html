@@ -1,0 +1,16 @@
+{% load humanize %}
+<div class="card">
+    <div class="flex items-center justify-between mb-4">
+        <div class="ai-orb" style="width: 40px; height: 40px;">
+            <i data-lucide="{{ icon }}" style="width: 20px; height: 20px; color: white;"></i>
+        </div>
+        {% if trend %}
+        <div class="text-sm font-medium {% if trend_positive %}text-success{% else %}text-error{% endif %}">
+            {{ trend }}
+            {% if trend_positive %}↑{% else %}↓{% endif %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="text-3xl font-bold mb-1">{{ value|default:0 }}</div>
+    <div class="text-sm text-muted">{{ label }}</div>
+</div>

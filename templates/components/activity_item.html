@@ -1,0 +1,38 @@
+<div class="flex items-start gap-4 p-4 hover:bg-card-hover rounded-lg transition cursor-pointer">
+    <div class="flex-shrink-0">
+        {% if activity.type == 'call' %}
+        <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center">
+            <i data-lucide="phone" style="width: 18px; height: 18px; color: var(--color-primary);"></i>
+        </div>
+        {% elif activity.type == 'message' %}
+        <div class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
+            <i data-lucide="mail" style="width: 18px; height: 18px; color: var(--color-accent);"></i>
+        </div>
+        {% elif activity.type == 'urgent' %}
+        <div class="w-10 h-10 rounded-full bg-orange-500/10 flex items-center justify-center">
+            <i data-lucide="alert-triangle" style="width: 18px; height: 18px; color: var(--color-urgent);"></i>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="flex-1 min-w-0">
+        <div class="flex items-center justify-between mb-1">
+            <span class="font-medium text-sm">{{ activity.title }}</span>
+            <span class="text-xs text-muted">{{ activity.time|timesince }} ago</span>
+        </div>
+        <div class="text-sm text-muted mb-1">{{ activity.subtitle }}</div>
+        <div class="text-sm text-light truncate">{{ activity.description }}</div>
+    </div>
+    
+    {% if activity.status %}
+    <div class="flex-shrink-0">
+        {% if activity.status == 'urgent' %}
+        <span class="badge badge-urgent">Urgent</span>
+        {% elif activity.status == 'escalated' %}
+        <span class="badge badge-warning">Escalated</span>
+        {% else %}
+        <span class="badge badge-neutral">{{ activity.status|title }}</span>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>

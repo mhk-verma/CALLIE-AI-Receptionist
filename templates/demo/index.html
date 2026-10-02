@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Demo - CALLIE</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Design System -->
+    <link rel="stylesheet" href="/static/css/design-system.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="max-w-6xl mx-auto py-8">
+            <div class="mb-6">
+                <a href="/" class="btn btn-ghost">
+                    <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+                    Back to Home
+                </a>
+            </div>
+            
+            <div class="page-header">
+                <h1 class="page-title-large">Live Demo</h1>
+                <p class="page-description">Experience Callie in action with simulated customer interactions</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Call Simulation -->
+                <div class="card">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="ai-orb" style="width: 48px; height: 48px;">
+                            <i data-lucide="phone" style="width: 24px; height: 24px; color: white;"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold">Phone Call Simulation</h3>
+                            <p class="text-sm text-muted">Test the voice receptionist</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 p-4 bg-background rounded-lg border border-border">
+                            <div class="ai-orb" style="width: 32px; height: 32px;">
+                                <i data-lucide="sparkles" style="width: 16px; height: 16px; color: white;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-medium text-sm">Callie</div>
+                                <div class="text-xs text-muted">AI Receptionist</div>
+                            </div>
+                            <span class="status-online"></span>
+                        </div>
+                        
+                        <a href="/demo/simulate-call/" class="btn btn-primary w-full">
+                            <i data-lucide="phone" style="width: 16px; height: 16px;"></i>
+                            Start Call Simulation
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Message Simulation -->
+                <div class="card">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="ai-orb" style="width: 48px; height: 48px;">
+                            <i data-lucide="message-square" style="width: 24px; height: 24px; color: white;"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold">Message Simulation</h3>
+                            <p class="text-sm text-muted">Test message handling</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="flex items-center gap-2 p-3 bg-background rounded-lg border border-border">
+                                <i data-lucide="message-circle" style="width: 16px; height: 16px; color: var(--color-accent);"></i>
+                                <span class="text-sm">SMS</span>
+                            </div>
+                            <div class="flex items-center gap-2 p-3 bg-background rounded-lg border border-border">
+                                <i data-lucide="message-circle" style="width: 16px; height: 16px; color: var(--color-accent);"></i>
+                                <span class="text-sm">WhatsApp</span>
+                            </div>
+                            <div class="flex items-center gap-2 p-3 bg-background rounded-lg border border-border">
+                                <i data-lucide="message-circle" style="width: 16px; height: 16px; color: var(--color-accent);"></i>
+                                <span class="text-sm">Instagram</span>
+                            </div>
+                            <div class="flex items-center gap-2 p-3 bg-background rounded-lg border border-border">
+                                <i data-lucide="message-circle" style="width: 16px; height: 16px; color: var(--color-accent);"></i>
+                                <span class="text-sm">Website Chat</span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center text-sm text-muted">
+                            Message simulation coming soon
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Demo Info -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">About Demo Mode</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="flex items-start gap-3">
+                        <i data-lucide="check-circle" style="width: 20px; height: 20px; color: var(--color-success); flex-shrink: 0;"></i>
+                        <div>
+                            <div class="font-medium text-sm">No API Required</div>
+                            <div class="text-xs text-muted">Works without external credentials</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-3">
+                        <i data-lucide="check-circle" style="width: 20px; height: 20px; color: var(--color-success); flex-shrink: 0;"></i>
+                        <div>
+                            <div class="font-medium text-sm">Real Interactions</div>
+                            <div class="text-xs text-muted">Simulates actual customer calls</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-3">
+                        <i data-lucide="check-circle" style="width: 20px; height: 20px; color: var(--color-success); flex-shrink: 0;"></i>
+                        <div>
+                            <div class="font-medium text-sm">Urgency Detection</div>
+                            <div class="text-xs text-muted">Tests escalation and urgency</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-3">
+                        <i data-lucide="check-circle" style="width: 20px; height: 20px; color: var(--color-success); flex-shrink: 0;"></i>
+                        <div>
+                            <div class="font-medium text-sm">Database Records</div>
+                            <div class="text-xs text-muted">Creates real conversation data</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

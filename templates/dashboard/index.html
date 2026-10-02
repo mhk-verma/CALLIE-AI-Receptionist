@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CALLIE</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Design System -->
+    <link rel="stylesheet" href="/static/css/design-system.css">
+</head>
+<body>
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="sidebar-brand">
+                    <div class="ai-orb">
+                        <i data-lucide="sparkles" style="width: 20px; height: 20px; color: white;"></i>
+                    </div>
+                    <div>
+                        <div class="sidebar-brand-text">CALLIE</div>
+                        <div class="sidebar-brand-subtitle">AI Receptionist</div>
+                    </div>
+                </a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="/dashboard/" class="nav-item active">
+                        <i data-lucide="layout-dashboard"></i>
+                        Dashboard
+                    </a>
+                    <a href="/demo/" class="nav-item">
+                        <i data-lucide="play"></i>
+                        Live Demo
+                    </a>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="flex items-center gap-3">
+                    <div class="ai-orb" style="width: 32px; height: 32px;">
+                        <i data-lucide="sparkles" style="width: 16px; height: 16px; color: white;"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-sm font-medium">Callie</div>
+                        <div class="text-xs text-success flex items-center gap-1">
+                            <span class="status-online" style="width: 6px; height: 6px;"></span>
+                            Online
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto">
+            <div class="page-content">
+                <div class="max-w-7xl mx-auto">
+                    <div class="page-header">
+                        <h1 class="page-title-large">Good morning, Guest</h1>
+                        <p class="page-description">Your AI receptionist is working for you.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                        <!-- Callie Card -->
+                        <div class="lg:col-span-1">
+                            <div class="card" style="background: var(--gradient-subtle); border-color: rgba(99, 102, 241, 0.3);">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="ai-orb" style="width: 48px; height: 48px;">
+                                        <i data-lucide="sparkles" style="width: 24px; height: 24px; color: white;"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold">✦ CALLIE</div>
+                                        <div class="text-xs text-muted">AI Receptionist</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center gap-2 mb-4">
+                                    <div class="ai-orb" style="width: 24px; height: 24px;">
+                                        <i data-lucide="phone" style="width: 12px; height: 12px; color: white;"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-medium">● Online</div>
+                                        <div class="text-xs text-muted">Available 24/7</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-3">
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-muted">Calls handled</span>
+                                        <span class="font-medium">24</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-muted">Resolution</span>
+                                        <span class="font-medium text-accent">94.8%</span>
+                                    </div>
+                                </div>
+                                
+                                <a href="/demo/" class="btn btn-primary w-full mt-4">
+                                    <i data-lucide="play" style="width: 16px; height: 16px;"></i>
+                                    Open Live Demo
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Primary Stats -->
+                        <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="card">
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="phone" style="width: 20px; height: 20px; color: var(--color-primary);"></i>
+                                    <div class="flex-1">
+                                        <div class="text-sm text-muted">Calls Today</div>
+                                        <div class="text-2xl font-bold">24</div>
+                                    </div>
+                                    <div class="text-xs text-success">↑ 12.5%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="mail" style="width: 20px; height: 20px; color: var(--color-primary);"></i>
+                                    <div class="flex-1">
+                                        <div class="text-sm text-muted">Messages</div>
+                                        <div class="text-2xl font-bold">17</div>
+                                    </div>
+                                    <div class="text-xs text-success">↑ 8.2%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="alert-triangle" style="width: 20px; height: 20px; color: var(--color-urgent);"></i>
+                                    <div class="flex-1">
+                                        <div class="text-sm text-muted">Urgent Issues</div>
+                                        <div class="text-2xl font-bold">3</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="check-circle" style="width: 20px; height: 20px; color: var(--color-success);"></i>
+                                    <div class="flex-1">
+                                        <div class="text-sm text-muted">AI Resolution</div>
+                                        <div class="text-2xl font-bold">94.8%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Setup Prompt -->
+                    <div class="card" style="border-color: var(--color-primary);">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0">
+                                <div class="ai-orb" style="width: 48px; height: 48px;">
+                                    <i data-lucide="rocket" style="width: 24px; height: 24px; color: white;"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-semibold mb-2">Get Started with CALLIE</h3>
+                                <p class="text-sm text-muted mb-4">This is a demo version. Complete the setup to configure your AI receptionist.</p>
+                                <div class="flex gap-2">
+                                    <a href="/demo/" class="btn btn-primary">
+                                        <i data-lucide="play" style="width: 16px; height: 16px;"></i>
+                                        Try Live Demo
+                                    </a>
+                                    <a href="/accounts/signup/" class="btn btn-secondary">
+                                        <i data-lucide="user-plus" style="width: 16px; height: 16px;"></i>
+                                        Create Account
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
