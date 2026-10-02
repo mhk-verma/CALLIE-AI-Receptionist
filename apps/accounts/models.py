@@ -56,7 +56,7 @@ class User(AbstractUser):
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    REQUIRED_FIELDS = []
 
     objects = UserManager()
 

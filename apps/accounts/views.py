@@ -22,19 +22,10 @@ class SignUpView(CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         
-        # Create email verification token
-        token = secrets.token_urlsafe(32)
-        expires_at = timezone.now() + timedelta(hours=24)
-        EmailVerification.objects.create(
-            user=self.object,
-            token=token,
-            expires_at=expires_at
-        )
-        
-        # TODO: Send verification email
+        # Skip email verification for demo
         messages.success(
             self.request,
-            'Account created successfully! Please check your email to verify your account.'
+            'Account created successfully! You can now log in.'
         )
         return response
 
@@ -48,12 +39,9 @@ class LoginView(FormView):
     def form_valid(self, form):
         user = form.get_user()
         login(self.request, user)
-        messages.success(self.request, f'Welcome back, {user.get_full_name()}!')
+        messages.success(self.request, f'Welcome back, {user.email}!')
         
-        # Redirect to onboarding if not completed
-        if not user.onboarding_completed:
-            return redirect('accounts:onboarding')
-        
+        # Skip onboarding check for demo
         return super().form_valid(form)
 
 
