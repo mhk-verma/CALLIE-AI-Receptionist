@@ -63,7 +63,6 @@ MIDDLEWARE = [
 
 # WhiteNoise configuration
 WHITENOISE_USE_FINDERS = True
-WHITENOISE_AUTOREFRESH = True
 
 ROOT_URLCONF = 'config.urls'
 
